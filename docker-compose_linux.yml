@@ -1,0 +1,39 @@
+---
+version: '3'
+
+services:
+ nexus:
+    container_name: nexus_ci
+    image: sonatype/nexus
+    ports:
+    - 8081:8081
+ sonarqube:
+    container_name: sonar_ci
+    image: javieroramon/sonar_ci:latest
+    ports:
+    - 9000:9000
+ jenkins:
+    container_name: jenkins_ci
+    image: jenkinsci/jenkins:latest
+    volumes:
+     - C:/docker/jenkins/jenkins_home:/var/jenkins_home 
+    ports:
+    - 49001:8080
+ gitlab:
+    container_name: gitlab_ci
+    image: javieroramon/gitlab_ci:latest
+    hostname: 172.18.0.1
+    volumes:
+      - /mnt/c/docker/gitlab/gitlab/config:/etc/gitlab
+      - /mnt/c/docker/gitlab/gitlab/logs:/var/log/gitlab
+      - /mnt/c/docker/gitlab/gitlab/data:/var/opt/gitlab
+    ports:
+    - 443:443 
+    - 80:80 
+    - 22:22 
+ gitlab-runner:
+    container_name: gitlab-runner_ci
+    image: javieroramon/gitlab_runner_ci:latest
+    volumes:
+    - C:/docker/gitlab/gitlab-runner/config:/etc/gitlab-runner 
+    - C:/docker/gitlab/gitlab-runner/var/run/docker.sock:/var/run/docker.sock
